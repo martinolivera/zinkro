@@ -18,6 +18,8 @@ jobs:
         run: |
           git config --global user.name "martinolivera"
           git config --global user.email "martin.olivera@gmail.com"
+      - name: List docs content
+        run: ls -l docs/
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
