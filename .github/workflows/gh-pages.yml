@@ -14,6 +14,10 @@ jobs:
           rm -rf docs
           mkdir docs
           cp -r views/* docs/
+      - name: Set git user
+        run: |
+          git config --global user.name "martinolivera"
+          git config --global user.email "martin.olivera@gmail.com"
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
