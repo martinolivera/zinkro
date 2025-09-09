@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Calendario Zinkro 13x28+1</title>
+  <style>
+    body { font-family: sans-serif; background: #f8f8ff; }
+    .topbar {
+      width: 100vw;
+      background: #222e44;
+      color: #fff;
+      padding: 18px 0 14px 0;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px #0002;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.1em;
+      gap: 18px;
+    }
+    .topbar label { margin-right: 6px; font-weight: bold; }
+    .topbar select, .topbar input[type=number] {
+      font-size: 1em;
+      border-radius: 5px;
+      border: 1px solid #bbb;
+      padding: 2px 8px;
+      margin-right: 10px;
+    }
+    .topbar input[type=number] { width: 60px; }
+    .topbar input[type=number]::-webkit-inner-spin-button,
+    .topbar input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .topbar select:focus, .topbar input[type=number]:focus {
+      outline: 2px solid #0077cc;
+    }
+    .calendar { display: flex; flex-direction: column; align-items: center; margin-top: 0; }
+    .months-row { display: flex; justify-content: center; margin: 18px 0 0 0; }
+    .month {
+      background: #fff;
+      border: 2px solid #333;
+      border-radius: 10px;
+      margin: 0 8px;
+      padding: 8px 8px 4px 8px;
+      box-shadow: 2px 2px 8px #bbb2;
+      min-width: 180px;
+      position: relative;
+    }
+    .month-title { text-align: center; font-weight: bold; font-size: 1.2em; margin-bottom: 4px; color: #333; }
+    .days-header { display: flex; justify-content: space-between; font-size: 0.9em; color: #888; margin-bottom: 2px; }
+    .days-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+    .day {
+      background: #f4faff;
+      border-radius: 4px;
+      text-align: center;
+      padding: 2px 0;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.2s;
+      position: relative;
+    }
+    .day:hover { background: #b3e0ff; }
+    .tooltip {
+      display: none;
+      position: absolute;
+      left: 50%;
+      top: -30px;
+      transform: translateX(-50%);
+      background: #e0f0ff;
+      color: #0077cc;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.95em;
+      box-shadow: 1px 1px 6px #bbb2;
+      z-index: 100;
+      white-space: nowrap;
+    }
+    .day:hover .tooltip { display: block; }
+  .dia-zero:hover .tooltip { display: block; }
+    .dia-zero {
+  background: #fff;
+  border: 2px solid #333;
+  border-radius: 10px;
+  margin: 18px 0 0 0;
+  padding: 18px 40px;
+  text-align: center;
+  font-size: 1.3em;
+  color: #333;
+  font-weight: bold;
+  box-shadow: 2px 2px 8px #bbb2;
+  position: relative;
+  z-index: 20;
+      /* min-width y max-width ahora se definen arriba */
+    }
+  .dia-zero-label {
+      color: #333;
+    }
+  .dz-dia {
+      display: inline-block;
+      position: relative;
+      cursor: pointer;
+      font-weight: bold;
+      color: #333;
+    }
+    .dz-dia:hover .tooltip { display: block; }
+    .dia-extra {
+      background: #fff;
+      border: 2px dashed #333;
+      border-radius: 10px;
+      margin: 24px 0 0 0;
+      padding: 16px 40px;
+      text-align: center;
+      font-size: 1.15em;
+      color: #333;
+      font-weight: bold;
+      box-shadow: 2px 2px 8px #bbb2;
+      position: relative;
+      opacity: 0.4;
+      cursor: not-allowed;
+      transition: opacity 0.3s, cursor 0.3s;
+      /* min-width y max-width ahora se definen arriba */
+    }
+    .dia-extra.activa {
+      opacity: 1;
+      cursor: pointer;
+    }
+    .dia-extra-label { color: #333; font-size: 1em; font-weight: bold; margin-top: 4px; }
+    .ex-dia {
+      display: inline-block;
+      position: relative;
+      cursor: pointer;
+      font-weight: bold;
+      color: #333;
+    }
+    .ex-dia:hover .tooltip { display: block; }
+    .dia-zero, .dia-extra {
+      width: 480px;
+      min-width: 480px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+      box-sizing: border-box;
+      margin-top: 18px;
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+<div class="topbar">
+      <span>Día de inicio: <b>21 de marzo</b> de</span>
+      <select id="start-year"></select>
+      <label for="month-names">Nombres de los meses:</label>
+      <select id="month-names">
+        <option value="numeric" selected>Numérico</option>
+      </select>
+    </div>
+<div class="calendar">
+  <!-- Día Zero ARRIBA -->
+  <div class="dia-zero">
+    <span class="dz-dia">Día Fuera del Tiempo
+      <span class="tooltip">21 de marzo</span>
+    </span>
+    <div class="dia-zero-label">Día Zero</div>
+  </div>
+  <!-- Fila 1: 4 meses -->
+  <div class="months-row">
+    <div class="month"><div class="month-title">Mes 1</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m1"></div></div>
+    <div class="month"><div class="month-title">Mes 2</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m2"></div></div>
+    <div class="month"><div class="month-title">Mes 3</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m3"></div></div>
+    <div class="month"><div class="month-title">Mes 4</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m4"></div></div>
+  </div>
+  <!-- Fila 2: 5 meses -->
+  <div class="months-row">
+    <div class="month"><div class="month-title">Mes 5</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m5"></div></div>
+    <div class="month"><div class="month-title">Mes 6</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m6"></div></div>
+    <div class="month"><div class="month-title">Mes 7</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m7"></div></div>
+    <div class="month"><div class="month-title">Mes 8</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m8"></div></div>
+    <div class="month"><div class="month-title">Mes 9</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m9"></div></div>
+  </div>
+  <!-- Fila 3: 4 meses -->
+  <div class="months-row">
+    <div class="month"><div class="month-title">Mes 10</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m10"></div></div>
+    <div class="month"><div class="month-title">Mes 11</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m11"></div></div>
+    <div class="month"><div class="month-title">Mes 12</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m12"></div></div>
+    <div class="month"><div class="month-title">Mes 13</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m13"></div></div>
+  </div>
+
+</div>
+<div class="dia-extra" id="dia-extra-block">
+  <span class="ex-dia">Día Adicional de Ajuste
+    <span class="tooltip">Solo se activa en años bisiestos (cada 4 años). Se agrega antes del Día Zero.</span>
+  </span>
+  <div class="dia-extra-label">(Bisiestos)</div>
+</div>
+<script>
+// --- Listas de nombres de meses ---
+const MONTH_NAMES = {
+  numeric: Array.from({length: 13}, (_, i) => `Mes ${i+1}`),
+  comte: [
+    'Moisés', 'Homero', 'Aristóteles', 'Arquímedes', 'César', 'San Pablo',
+    'Carlomagno', 'Dante', 'Gutenberg', 'Shakespeare', 'Descartes', 'Frederic', 'Bichat'
+  ],
+  natural: [
+    'Amanecer', 'Sol', 'Viento', 'Lluvia', 'Semilla', 'Bosque',
+    'Montaña', 'Río', 'Mar', 'Nube', 'Fruto', 'Noche', 'Luna'
+  ],
+  latino: [
+    'Unarius', 'Duarius', 'Triarius', 'Quartarius', 'Quintarius', 'Sextarius',
+    'Septarius', 'Octarius', 'Novarius', 'Decarius', 'Undecimus', 'Duodecimus', 'Terdecimus'
+  ],
+  neocelta: [
+    'Fearn (Aliso)', 'Saille (Sauce)', 'Uath (Espino)', 'Duir (Roble)', 'Tinne (Acebo)', 'Coll (Avellano)',
+    'Muin (Vid)', 'Gort (Hiedra)', 'Ngetal (Junco)', 'Ruis (Saúco)', 'Beth (Abedul)', 'Luis (Fresno Silvestre)', 'Nion (Fresno)'
+  ],
+  maya: [
+    'Hun (Magnético)', 'Ka (Lunar)', 'Ox (Eléctrico)', 'Kan (Auto-Existente)', 'Ho (Armónico)', 'Uak (Rítmico)',
+    'Uuk (Resonante)', 'Waxak (Galáctico)', 'Bolon (Solar)', 'Lahun (Planetario)', 'Buluk (Espectral)', 'Lahka (Cristal)', 'Oxlahun (Cósmico)'
+  ],
+  humano: [
+    'Conciencia', 'Curiosidad', 'Creatividad', 'Resiliencia', 'Valentía', 'Empatía',
+    'Integridad', 'Sabiduría', 'Compasión', 'Generosidad', 'Paciencia', 'Gratitud', 'Unidad'
+  ]
+};
+// --- Barra superior: poblar años ---
+const yearSelect = document.getElementById('start-year');
+for (let y = 2026; y <= 2100; y++) {
+  const opt = document.createElement('option');
+  opt.value = y;
+  opt.textContent = y;
+  if (y === 2026) opt.selected = true;
+  yearSelect.appendChild(opt);
+}
+// Agregar opción al selector de nombres de meses
+const monthNamesSelect = document.getElementById('month-names');
+if (!monthNamesSelect.querySelector('[value="comte"]')) {
+  const opt = document.createElement('option');
+  opt.value = 'comte';
+  opt.textContent = 'Comte';
+  monthNamesSelect.appendChild(opt);
+}
+if (!monthNamesSelect.querySelector('[value="natural"]')) {
+  const opt = document.createElement('option');
+  opt.value = 'natural';
+  opt.textContent = 'Natural';
+  monthNamesSelect.appendChild(opt);
+}
+if (!monthNamesSelect.querySelector('[value="latino"]')) {
+  const opt = document.createElement('option');
+  opt.value = 'latino';
+  opt.textContent = 'Latino';
+  monthNamesSelect.appendChild(opt);
+}
+if (!monthNamesSelect.querySelector('[value="neocelta"]')) {
+  const opt = document.createElement('option');
+  opt.value = 'neocelta';
+  opt.textContent = 'Neo Celta';
+  monthNamesSelect.appendChild(opt);
+}
+if (!monthNamesSelect.querySelector('[value="maya"]')) {
+  const opt = document.createElement('option');
+  opt.value = 'maya';
+  opt.textContent = 'Maya';
+  monthNamesSelect.appendChild(opt);
+}
+if (!monthNamesSelect.querySelector('[value="humano"]')) {
+  const opt = document.createElement('option');
+  opt.value = 'humano';
+  opt.textContent = 'Humano';
+  monthNamesSelect.appendChild(opt);
+}
+// --- Generar los días del calendario dinámicamente ---
+function generateDays() {
+  for (let m = 1; m <= 13; m++) {
+    const grid = document.getElementById('m'+m);
+    grid.innerHTML = '';
+    for (let d = 1; d <= 28; d++) {
+      const div = document.createElement('div');
+      div.className = 'day';
+      div.innerHTML = d + '<span class="tooltip"></span>';
+      grid.appendChild(div);
+    }
+  }
+}
+// --- Función para actualizar tooltips, nombres de meses y lógica de bisiestos ---
+function updateCalendar() {
+  const day = 21;
+  const month = 2; // marzo (0=enero)
+  const year = parseInt(document.getElementById('start-year').value, 10);
+  const gregStart = new Date(year, month, day);
+  const monthNameType = document.getElementById('month-names').value;
+  const monthNames = MONTH_NAMES[monthNameType] || MONTH_NAMES.numeric;
+  generateDays();
+  // Calcular el día de la semana del primer día del calendario (día 1 mes 1)
+  const firstDay = new Date(gregStart.getTime() + 1 * 24*60*60*1000); // Día 1 mes 1 = 22 de marzo
+  const weekDays = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+  const startIdx = firstDay.getDay(); // 0=Dom, 1=Lun, ...
+  // Recalcular encabezados y nombres de los meses
+  for (let m = 1; m <= 13; m++) {
+    const monthDiv = document.getElementById('m'+m).parentElement;
+    // Nombres de los meses
+    const title = monthDiv.querySelector('.month-title');
+    if (title) title.textContent = monthNames[m-1];
+    // Encabezados de días de la semana
+    const header = monthDiv.querySelector('.days-header');
+    if (header) {
+      header.innerHTML = '';
+      for (let i = 0; i < 7; i++) {
+        const idx = (startIdx + i) % 7;
+        const span = document.createElement('span');
+        span.textContent = weekDays[idx];
+        header.appendChild(span);
+      }
+    }
+  }
+  // Actualizar tooltips de los días
+  for (let m = 1; m <= 13; m++) {
+    const grid = document.getElementById('m'+m);
+    const days = grid.querySelectorAll('.day');
+    for (let d = 1; d <= 28; d++) {
+      const absDay = (m-1)*28 + (d-1) + 1;
+      const dElem = days[d-1];
+      const tooltip = dElem.querySelector('.tooltip');
+      const date = new Date(gregStart.getTime() + absDay * 24*60*60*1000);
+      tooltip.textContent = date.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
+    }
+  }
+  // Día Zero
+  const dzTooltip = document.querySelector('.dz-dia .tooltip');
+  if (dzTooltip) {
+    dzTooltip.textContent = gregStart.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
+  }
+  // Día Extra (bisiesto según el año gregoriano del día extra)
+  const extraBlock = document.getElementById('dia-extra-block');
+  const extraTooltip = extraBlock.querySelector('.tooltip');
+  const extraDate = new Date(gregStart.getTime() + (13*28 + 1) * 24*60*60*1000);
+  const extraYear = extraDate.getFullYear();
+  if ((extraYear % 4 === 0 && extraYear % 100 !== 0) || (extraYear % 400 === 0)) {
+    extraBlock.classList.add('activa');
+    if (extraTooltip) {
+      extraTooltip.textContent = extraDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
+    }
+  } else {
+    extraBlock.classList.remove('activa');
+    if (extraTooltip) {
+      extraTooltip.textContent = 'Solo se activa en años bisiestos (cada 4 años).';
+    }
+  }
+}
+// --- Listeners para inputs ---
+document.getElementById('start-year').addEventListener('change', updateCalendar);
+document.getElementById('month-names').addEventListener('change', updateCalendar);
+// --- Inicializar tooltips y calendario ---
+updateCalendar();
+</script>
+</body>
+</html>
