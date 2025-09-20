@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Zinkro: Calendario de 13 Meses</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="zinkro.js"></script>
+</head>
+<body>
+  <nav style="margin-bottom:20px;">
+    <a href="index_en.html" style="float:right; color:#3a6ea5; font-weight:600;">English</a>
+    <span style="color:#222e44; font-weight:600;">Inicio</span> |
+    <a href="contexto.html">Propuesta</a> |
+    <a href="visual_grid.html">Calendario Visual</a> |
+    <a href="converter.html">Conversor de Fechas</a>
+  </nav>
+  <main>
+    <h1>Bienvenido a Zinkro</h1>
+    <p><b>Zinkro</b> es un calendario alternativo que propone 13 meses de 28 días (4 semanas exactas cada uno), más uno o dos días fuera del tiempo, comenzando el 21 de marzo del año -10.000 (Era Holocena). Su objetivo es reconectar el tiempo humano con los ritmos naturales y cósmicos, simplificar la planificación anual y democratizar la simbología de los meses.</p>
+    <ul>
+      <li>Simetría perfecta: cada mes comienza el mismo día de la semana.</li>
+      <li>Meses de igual duración, sin ajustes irregulares.</li>
+      <li>Inicio en el equinoccio de marzo (renovación natural).</li>
+      <li>Días fuera del tiempo para reflexión y celebración global.</li>
+      <li>Opciones flexibles para nombrar los meses: numéricos, naturales, cualidades humanas, culturas ancestrales.</li>
+      <li>Regla de año bisiesto: compatible con el ciclo gregoriano.</li>
+    </ul>
+    <div id="hoy-destacado" style="margin:24px 0; font-size:1.2em; font-weight:600; color:#fff; background:#3a6ea5; border-radius:8px; padding:16px; text-align:center;">
+      <span id="fecha-greg"></span><br>
+      <span id="fecha-zinkro"></span>
+    </div>
+    <div id="hoy-zinkro-extra" style="margin:12px 0; font-size:1.1em; font-weight:500; color:#3a6ea5; background:#ffe9b3; border-radius:8px; padding:10px; text-align:center;"></div>
+  </main>
+  <script>
+    // Mostrar la fecha de hoy en ambos calendarios
+    const hoy = new Date();
+    const yyyy = hoy.getFullYear();
+    const mm = hoy.getMonth()+1;
+    const dd = hoy.getDate();
+    document.getElementById('fecha-greg').innerHTML = `Hoy en calendario gregoriano: <span style='color:#ffe9b3;'>${dd}/${mm}/${yyyy}</span>`;
+    const z = Zinkro.gregorianToZinkro(`${yyyy}-${String(mm).padStart(2,'0')}-${String(dd).padStart(2,'0')}`);
+    let texto = '';
+    if (z.diaZero) {
+      texto = `Hoy en Zinkro: <span style='color:#ffe9b3;'>Día Zero</span>`;
+    } else {
+      texto = `Hoy en Zinkro: <span style='color:#ffe9b3;'>Año ${z.year} HE, Mes ${z.month}, Día ${z.day}</span>`;
+    }
+    document.getElementById('fecha-zinkro').innerHTML = texto;
+    // Extra: solo la fecha Zinkro destacada
+    document.getElementById('hoy-zinkro-extra').innerHTML = `Fecha Zinkro actual: <span style='color:#3a6ea5; background:#fffbe9; padding:2px 8px; border-radius:6px;'>${z.diaZero ? 'Día Zero' : `Año ${z.year} HE, Mes ${z.month}, Día ${z.day}`}</span>`;
+  </script>
+</body>
+</html>
