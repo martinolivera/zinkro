@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Zinkro: Calendario Visual</title>
+  <title>Zinkro Visual Calendar</title>
   <style>
     body { font-family: sans-serif; background: #f8f8ff; }
     .topbar {
@@ -149,89 +150,89 @@
 </head>
 <body>
 <nav style="margin-bottom:20px; background:#eaf0fa; padding:12px 24px; font-size:1.05em; border-bottom:1px solid #d0d8e8;">
-  <a href="visual_grid_en.html" style="float:right; color:#3a6ea5; font-weight:600;">English</a>
-  <a href="index.html">Inicio</a> |
-  <a href="contexto.html">Propuesta</a> |
-  <span style="color:#222e44; font-weight:600;">Calendario Visual</span> |
-  <a href="converter.html">Conversor de Fechas</a>
+  <a href="visual_grid.html" style="float:right; color:#3a6ea5; font-weight:600;">Español</a>
+  <a href="index_en.html">Home</a> |
+  <a href="context.html">Proposal</a> |
+  <span style="color:#222e44; font-weight:600;">Visual Calendar</span> |
+  <a href="converter_en.html">Date Converter</a>
 </nav>
 <div class="topbar">
-      <span>Día de inicio: <b>21 de marzo</b> de</span>
+      <span>Start day: <b>March 21st</b> of</span>
       <select id="start-year"></select>
-      <span style="margin-left:8px; font-weight:600; color:#3a6ea5;">Era Holocena (HE)</span>
-      <label for="month-names">Nombres de los meses:</label>
+      <span style="margin-left:8px; font-weight:600; color:#3a6ea5;">Holocene Era (HE)</span>
+      <label for="month-names">Month names:</label>
       <select id="month-names">
-        <option value="numeric" selected>Numérico</option>
+        <option value="numeric" selected>Numeric</option>
       </select>
     </div>
 <div class="calendar">
-  <!-- Día Zero ARRIBA -->
+  <!-- Day Zero TOP -->
   <div class="dia-zero">
-    <span class="dz-dia">Día Fuera del Tiempo
-      <span class="tooltip">21 de marzo</span>
+    <span class="dz-dia">Day Out of Time
+      <span class="tooltip">March 21st</span>
     </span>
-    <div class="dia-zero-label">Día Zero</div>
+    <div class="dia-zero-label">Day Zero</div>
   </div>
-  <!-- Fila 1: 4 meses -->
+  <!-- Row 1: 4 months -->
   <div class="months-row">
-    <div class="month"><div class="month-title">Mes 1</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m1"></div></div>
-    <div class="month"><div class="month-title">Mes 2</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m2"></div></div>
-    <div class="month"><div class="month-title">Mes 3</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m3"></div></div>
-    <div class="month"><div class="month-title">Mes 4</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m4"></div></div>
+    <div class="month"><div class="month-title">Month 1</div><div class="days-header"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div><div class="days-grid" id="m1"></div></div>
+    <div class="month"><div class="month-title">Month 2</div><div class="days-header"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div><div class="days-grid" id="m2"></div></div>
+    <div class="month"><div class="month-title">Month 3</div><div class="days-header"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div><div class="days-grid" id="m3"></div></div>
+    <div class="month"><div class="month-title">Month 4</div><div class="days-header"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div><div class="days-grid" id="m4"></div></div>
   </div>
-  <!-- Fila 2: 5 meses -->
+  <!-- Row 2: 5 months -->
   <div class="months-row">
-    <div class="month"><div class="month-title">Mes 5</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m5"></div></div>
-    <div class="month"><div class="month-title">Mes 6</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m6"></div></div>
-    <div class="month"><div class="month-title">Mes 7</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m7"></div></div>
-    <div class="month"><div class="month-title">Mes 8</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m8"></div></div>
-    <div class="month"><div class="month-title">Mes 9</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m9"></div></div>
+    <div class="month"><div class="month-title">Month 5</div><div class="days-header"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div><div class="days-grid" id="m5"></div></div>
+    <div class="month"><div class="month-title">Month 6</div><div class="days-header"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div><div class="days-grid" id="m6"></div></div>
+    <div class="month"><div class="month-title">Month 7</div><div class="days-header"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div><div class="days-grid" id="m7"></div></div>
+    <div class="month"><div class="month-title">Month 8</div><div class="days-header"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div><div class="days-grid" id="m8"></div></div>
+    <div class="month"><div class="month-title">Month 9</div><div class="days-header"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div><div class="days-grid" id="m9"></div></div>
   </div>
-  <!-- Fila 3: 4 meses -->
+  <!-- Row 3: 4 months -->
   <div class="months-row">
-    <div class="month"><div class="month-title">Mes 10</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m10"></div></div>
-    <div class="month"><div class="month-title">Mes 11</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m11"></div></div>
-    <div class="month"><div class="month-title">Mes 12</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m12"></div></div>
-    <div class="month"><div class="month-title">Mes 13</div><div class="days-header"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div><div class="days-grid" id="m13"></div></div>
+    <div class="month"><div class="month-title">Month 10</div><div class="days-header"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div><div class="days-grid" id="m10"></div></div>
+    <div class="month"><div class="month-title">Month 11</div><div class="days-header"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div><div class="days-grid" id="m11"></div></div>
+    <div class="month"><div class="month-title">Month 12</div><div class="days-header"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div><div class="days-grid" id="m12"></div></div>
+    <div class="month"><div class="month-title">Month 13</div><div class="days-header"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div><div class="days-grid" id="m13"></div></div>
   </div>
 
 </div>
 <div class="dia-extra" id="dia-extra-block">
-  <span class="ex-dia">Día Adicional de Ajuste
-    <span class="tooltip">Solo se activa en años bisiestos (cada 4 años). Se agrega antes del Día Zero.</span>
+  <span class="ex-dia">Additional Adjustment Day
+    <span class="tooltip">Only active in leap years (every 4 years). Added before Day Zero.</span>
   </span>
-  <div class="dia-extra-label">(Bisiestos)</div>
+  <div class="dia-extra-label">(Leap Years)</div>
 </div>
 <script>
-// --- Listas de nombres de meses ---
+// --- Month name lists ---
 const MONTH_NAMES = {
-  numeric: Array.from({length: 13}, (_, i) => `Mes ${i+1}`),
+  numeric: Array.from({length: 13}, (_, i) => `Month ${i+1}`),
   comte: [
-    'Moisés', 'Homero', 'Aristóteles', 'Arquímedes', 'César', 'San Pablo',
-    'Carlomagno', 'Dante', 'Gutenberg', 'Shakespeare', 'Descartes', 'Frederic', 'Bichat'
+    'Moses', 'Homer', 'Aristotle', 'Archimedes', 'Caesar', 'Saint Paul',
+    'Charlemagne', 'Dante', 'Gutenberg', 'Shakespeare', 'Descartes', 'Frederic', 'Bichat'
   ],
   natural: [
-    'Amanecer', 'Sol', 'Viento', 'Lluvia', 'Semilla', 'Bosque',
-    'Montaña', 'Río', 'Mar', 'Nube', 'Fruto', 'Noche', 'Luna'
+    'Dawn', 'Sun', 'Wind', 'Rain', 'Seed', 'Forest',
+    'Mountain', 'River', 'Sea', 'Cloud', 'Fruit', 'Night', 'Moon'
   ],
   latino: [
     'Unarius', 'Duarius', 'Triarius', 'Quartarius', 'Quintarius', 'Sextarius',
     'Septarius', 'Octarius', 'Novarius', 'Decarius', 'Undecimus', 'Duodecimus', 'Terdecimus'
   ],
   neocelta: [
-    'Fearn (Aliso)', 'Saille (Sauce)', 'Uath (Espino)', 'Duir (Roble)', 'Tinne (Acebo)', 'Coll (Avellano)',
-    'Muin (Vid)', 'Gort (Hiedra)', 'Ngetal (Junco)', 'Ruis (Saúco)', 'Beth (Abedul)', 'Luis (Fresno Silvestre)', 'Nion (Fresno)'
+    'Fearn (Alder)', 'Saille (Willow)', 'Uath (Hawthorn)', 'Duir (Oak)', 'Tinne (Holly)', 'Coll (Hazel)',
+    'Muin (Vine)', 'Gort (Ivy)', 'Ngetal (Reed)', 'Ruis (Elder)', 'Beth (Birch)', 'Luis (Wild Ash)', 'Nion (Ash)'
   ],
   maya: [
-    'Hun (Magnético)', 'Ka (Lunar)', 'Ox (Eléctrico)', 'Kan (Auto-Existente)', 'Ho (Armónico)', 'Uak (Rítmico)',
-    'Uuk (Resonante)', 'Waxak (Galáctico)', 'Bolon (Solar)', 'Lahun (Planetario)', 'Buluk (Espectral)', 'Lahka (Cristal)', 'Oxlahun (Cósmico)'
+    'Hun (Magnetic)', 'Ka (Lunar)', 'Ox (Electric)', 'Kan (Self-Existing)', 'Ho (Harmonic)', 'Uak (Rhythmic)',
+    'Uuk (Resonant)', 'Waxak (Galactic)', 'Bolon (Solar)', 'Lahun (Planetary)', 'Buluk (Spectral)', 'Lahka (Crystal)', 'Oxlahun (Cosmic)'
   ],
   humano: [
-    'Conciencia', 'Curiosidad', 'Creatividad', 'Resiliencia', 'Valentía', 'Empatía',
-    'Integridad', 'Sabiduría', 'Compasión', 'Generosidad', 'Paciencia', 'Gratitud', 'Unidad'
+    'Consciousness', 'Curiosity', 'Creativity', 'Resilience', 'Bravery', 'Empathy',
+    'Integrity', 'Wisdom', 'Compassion', 'Generosity', 'Patience', 'Gratitude', 'Unity'
   ]
 };
-// --- Barra superior: poblar años en Era Holocena ---
+// --- Topbar: populate years in Holocene Era ---
 const yearSelect = document.getElementById('start-year');
 for (let y = 2026; y <= 2100; y++) {
   const opt = document.createElement('option');
@@ -240,7 +241,7 @@ for (let y = 2026; y <= 2100; y++) {
   if (y === 2026) opt.selected = true;
   yearSelect.appendChild(opt);
 }
-// Agregar opción al selector de nombres de meses
+// Add options to month name selector
 const monthNamesSelect = document.getElementById('month-names');
 if (!monthNamesSelect.querySelector('[value="comte"]')) {
   const opt = document.createElement('option');
@@ -263,7 +264,7 @@ if (!monthNamesSelect.querySelector('[value="latino"]')) {
 if (!monthNamesSelect.querySelector('[value="neocelta"]')) {
   const opt = document.createElement('option');
   opt.value = 'neocelta';
-  opt.textContent = 'Neo Celta';
+  opt.textContent = 'Neo Celtic';
   monthNamesSelect.appendChild(opt);
 }
 if (!monthNamesSelect.querySelector('[value="maya"]')) {
@@ -275,10 +276,10 @@ if (!monthNamesSelect.querySelector('[value="maya"]')) {
 if (!monthNamesSelect.querySelector('[value="humano"]')) {
   const opt = document.createElement('option');
   opt.value = 'humano';
-  opt.textContent = 'Humano';
+  opt.textContent = 'Human';
   monthNamesSelect.appendChild(opt);
 }
-// --- Generar los días del calendario dinámicamente ---
+// --- Generate calendar days dynamically ---
 function generateDays() {
   for (let m = 1; m <= 13; m++) {
     const grid = document.getElementById('m'+m);
@@ -291,26 +292,26 @@ function generateDays() {
     }
   }
 }
-// --- Función para actualizar tooltips, nombres de meses y lógica de bisiestos ---
+// --- Update tooltips, month names, and leap year logic ---
 function updateCalendar() {
   const day = 21;
-  const month = 2; // marzo (0=enero)
+  const month = 2; // March (0=January)
   const year = parseInt(document.getElementById('start-year').value, 10);
   const gregStart = new Date(year, month, day);
   const monthNameType = document.getElementById('month-names').value;
   const monthNames = MONTH_NAMES[monthNameType] || MONTH_NAMES.numeric;
   generateDays();
-  // Calcular el día de la semana del primer día del calendario (día 1 mes 1)
-  const firstDay = new Date(gregStart.getTime() + 1 * 24*60*60*1000); // Día 1 mes 1 = 22 de marzo
-  const weekDays = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
-  const startIdx = firstDay.getDay(); // 0=Dom, 1=Lun, ...
-  // Recalcular encabezados y nombres de los meses
+  // Calculate weekday of first calendar day (day 1 month 1)
+  const firstDay = new Date(gregStart.getTime() + 1 * 24*60*60*1000); // Day 1 month 1 = March 22
+  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const startIdx = firstDay.getDay(); // 0=Sun, 1=Mon, ...
+  // Recalculate headers and month names
   for (let m = 1; m <= 13; m++) {
     const monthDiv = document.getElementById('m'+m).parentElement;
-    // Nombres de los meses
+    // Month names
     const title = monthDiv.querySelector('.month-title');
     if (title) title.textContent = monthNames[m-1];
-    // Encabezados de días de la semana
+    // Weekday headers
     const header = monthDiv.querySelector('.days-header');
     if (header) {
       header.innerHTML = '';
@@ -322,7 +323,7 @@ function updateCalendar() {
       }
     }
   }
-  // Actualizar tooltips de los días
+  // Update day tooltips
   for (let m = 1; m <= 13; m++) {
     const grid = document.getElementById('m'+m);
     const days = grid.querySelectorAll('.day');
@@ -331,15 +332,15 @@ function updateCalendar() {
       const dElem = days[d-1];
       const tooltip = dElem.querySelector('.tooltip');
       const date = new Date(gregStart.getTime() + absDay * 24*60*60*1000);
-      tooltip.textContent = date.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
+      tooltip.textContent = date.toLocaleDateString('en-US', { day: 'numeric', month: 'long' });
     }
   }
-  // Día Zero
+  // Day Zero
   const dzTooltip = document.querySelector('.dz-dia .tooltip');
   if (dzTooltip) {
-    dzTooltip.textContent = gregStart.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
+    dzTooltip.textContent = gregStart.toLocaleDateString('en-US', { day: 'numeric', month: 'long' });
   }
-  // Día Extra (bisiesto según el año gregoriano del día extra)
+  // Extra Day (leap year logic)
   const extraBlock = document.getElementById('dia-extra-block');
   const extraTooltip = extraBlock.querySelector('.tooltip');
   const extraDate = new Date(gregStart.getTime() + (13*28 + 1) * 24*60*60*1000);
@@ -347,19 +348,19 @@ function updateCalendar() {
   if ((extraYear % 4 === 0 && extraYear % 100 !== 0) || (extraYear % 400 === 0)) {
     extraBlock.classList.add('activa');
     if (extraTooltip) {
-      extraTooltip.textContent = extraDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
+      extraTooltip.textContent = extraDate.toLocaleDateString('en-US', { day: 'numeric', month: 'long' });
     }
   } else {
     extraBlock.classList.remove('activa');
     if (extraTooltip) {
-      extraTooltip.textContent = 'Solo se activa en años bisiestos (cada 4 años).';
+      extraTooltip.textContent = 'Only active in leap years (every 4 years).';
     }
   }
 }
-// --- Listeners para inputs ---
+// --- Listeners for inputs ---
 document.getElementById('start-year').addEventListener('change', updateCalendar);
 document.getElementById('month-names').addEventListener('change', updateCalendar);
-// --- Inicializar tooltips y calendario ---
+// --- Initialize tooltips and calendar ---
 updateCalendar();
 </script>
 </body>

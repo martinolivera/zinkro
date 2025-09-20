@@ -20,15 +20,8 @@ args = parser.parse_args()
 
 # Leer punto de inicio por defecto desde zinkro.conf si no se especifica --start
 def get_default_start_date():
-    conf_path = os.path.join(os.path.dirname(__file__), "zinkro.conf")
-    try:
-        with open(conf_path, "r") as f:
-            for line in f:
-                if line.startswith("START_DATE="):
-                    return line.strip().split("=")[1]
-    except Exception:
-        pass
-    return "2025-01-01"
+    # Siempre usar Era Holocena: 21 de marzo del -10.000
+    return "-10000-03-21"
 
 if args.start:
     start_date_str = args.start

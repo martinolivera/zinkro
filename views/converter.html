@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Zinkro: Conversor de Fechas</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="zinkro.js"></script>
+  <style>
+    body {
+      font-family: 'Montserrat', 'Roboto', Arial, sans-serif;
+      background: linear-gradient(120deg, #e0eafc 0%, #cfdef3 100%);
+      margin: 0;
+      color: #222e44;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 420px;
+      margin: 60px auto 32px auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 4px 32px #222e4412;
+      padding: 36px 28px 28px 28px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 1.5em;
+      font-weight: 700;
+      color: #1a3a5e;
+      margin-bottom: 0.6em;
+    }
+    label {
+      font-weight: 500;
+      color: #2b5d8c;
+      margin-bottom: 8px;
+      display: block;
+    }
+    input[type="date"] {
+      font-size: 1em;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid #b3c6e0;
+      margin-bottom: 12px;
+      width: 70%;
+    }
+    button {
+      font-size: 1em;
+      padding: 7px 18px;
+      border-radius: 6px;
+      border: none;
+      background: #3a6ea5;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 0 8px 18px 8px;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #1a3a5e;
+    }
+    .result {
+      margin-top: 18px;
+      font-size: 1.15em;
+      color: #1a3a5e;
+      background: #e0eafc;
+      border-radius: 8px;
+      padding: 14px 10px;
+      box-shadow: 0 2px 8px #b3c6e022;
+      min-height: 40px;
+    }
+    .desc {
+      font-size: 0.98em;
+      color: #3a6ea5;
+      margin-bottom: 18px;
+    }
+    nav {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    nav a {
+      color: #3a6ea5;
+      font-weight: 600;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+  <a href="converter_en.html" style="float:right; color:#3a6ea5; font-weight:600;">English</a>
+  <a href="index.html">Inicio</a> |
+  <a href="contexto.html">Propuesta</a> |
+  <a href="visual_grid.html">Calendario Visual</a> |
+  <span style="color:#222e44; font-weight:600;">Conversor de Fechas</span>
+  </nav>
+  <div class="container">
+    <h1>Conversor de Fechas Zinkro</h1>
+    <div class="desc">Ingresa una fecha gregoriana y obtén su equivalente en el calendario Zinkro.</div>
+    <label for="greg-date">Fecha gregoriana:</label>
+    <input type="date" id="greg-date">
+    <button id="today-btn">Hoy</button>
+    <button id="convert-btn">Convertir</button>
+    <div class="result" id="result"></div>
+  </div>
+  <script>
+    // Usar función compartida Zinkro.gregorianToZinkro
+    document.getElementById('today-btn').onclick = function() {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth()+1).padStart(2,'0');
+      const dd = String(today.getDate()).padStart(2,'0');
+      document.getElementById('greg-date').value = `${yyyy}-${mm}-${dd}`;
+      document.getElementById('result').textContent = '';
+    };
+    function showResult(dateStr) {
+      const z = Zinkro.gregorianToZinkro(dateStr);
+      let res = '';
+      if (!z) res = 'Fecha inválida.';
+      else if (z.diaZero) {
+        res = `Año ${z.year} HE, Día Zero (Portal)`;
+      } else {
+        res = `Año ${z.year} HE, Mes ${z.month}, Día ${z.day}`;
+      }
+      document.getElementById('result').textContent = res;
+    }
+    document.getElementById('convert-btn').onclick = function() {
+      const dateStr = document.getElementById('greg-date').value;
+      showResult(dateStr);
+    };
+    document.getElementById('greg-date').onchange = function() {
+      showResult(this.value);
+    };
+  </script>
+</body>
+</html>

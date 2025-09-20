@@ -31,38 +31,52 @@ class SimpleDate:
                 return SimpleDate(year, month, day)
         raise ValueError("Formato de fecha inválido")
 
+    def is_leap(self, year):
+        return (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)
     def to_ordinal(self):
         # Calcula el número de días desde el año 0-01-01 (no gregoriano)
-        # No considera años bisiestos
         y = self.year
         m = self.month
         d = self.day
-        # Días por año y mes
         days = y * 365 + (m - 1) * 30 + (d - 1)
-        # Ajuste simple para meses reales
         month_days = [31,28,31,30,31,30,31,31,30,31,30,31]
         if m > 1:
             days += sum(month_days[:m-1]) - (30 * (m-1))
+        # Sumar días bisiestos desde -10000 hasta el año anterior a y
+        leap_days = 0
+        for yr in range(-10000, y):
+            if self.is_leap(yr):
+                leap_days += 1
+        # Si el año actual es bisiesto y el mes > 2, sumar el día extra
+        if self.is_leap(y) and m > 2:
+            leap_days += 1
+        days += leap_days
         return days
 
     @staticmethod
+    def is_leap(year):
+        return (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)
+    @staticmethod
     def from_ordinal(n: int):
-        # Convierte un número de días a una fecha simple
-        # No considera años bisiestos
-        year = n // 365
-        rem = n % 365
-        # Aproximación: meses de 30 días
-        month = rem // 30 + 1
-        day = rem % 30 + 1
-        # Ajuste para meses reales
-        month_days = [31,28,31,30,31,30,31,31,30,31,30,31]
-        for i, md in enumerate(month_days):
-            if rem < md:
-                month = i + 1
-                day = rem + 1
+        # Convierte un número de días a una fecha simple considerando bisiestos
+        year = -10000
+        days = n
+        while True:
+            leap = SimpleDate.is_leap(year)
+            year_days = 365 + (1 if leap else 0)
+            if days < year_days:
                 break
-            rem -= md
-        return SimpleDate(year, month, day)
+            days -= year_days
+            year += 1
+        # Ahora days es el día dentro del año actual
+        month_days = [31,29 if SimpleDate.is_leap(year) else 28,31,30,31,30,31,31,30,31,30,31]
+        month = 1
+        for md in month_days:
+            if days < md:
+                day = days + 1
+                return SimpleDate(year, month, day)
+            days -= md
+            month += 1
 
     def __sub__(self, other):
         return self.to_ordinal() - other.to_ordinal()
@@ -87,25 +101,67 @@ class ZinkroCalendar:
         Convierte una fecha gregoriana a fecha Zinkro.
         Retorna (año, mes, día, es_dia_zero)
         """
+        # Calcular días totales desde el inicio Holoceno
         delta_days = date - self.start_date
-        year = delta_days // 365
-        day_of_year = delta_days % 365
-        if day_of_year == self.days_in_year:
-            return (year, None, None, True)  # Día Zero
-        month = day_of_year // self.days_in_month + 1
-        day = day_of_year % self.days_in_month + 1
-        return (year, month, day, False)
+        # Calcular año Zinkro y día dentro del año Zinkro considerando bisiestos
+        yearZ = 0
+        dias_restantes = delta_days
+        while True:
+            es_bisiesto = SimpleDate.is_leap(self.start_date.year + yearZ)
+            dias_en_este_ano = 365 + (1 if es_bisiesto else 0)
+            if dias_restantes < dias_en_este_ano:
+                break
+            dias_restantes -= dias_en_este_ano
+            yearZ += 1
+        # Día Zero: 21 de marzo de cualquier año
+        if (date.month == 3 and date.day == 21):
+            # Si es el inicio absoluto, año 0
+            if delta_days == 0:
+                return (0, None, None, True)
+            # Si es otro año, Día Zero de ese año
+            return (0, None, None, True)
+        # Día 366 (extra) en año bisiesto
+        if SimpleDate.is_leap(self.start_date.year + yearZ) and dias_restantes == 365:
+            return (yearZ + 1, None, None, 'dia366')
+            # Mapeo especial para fechas gregorianas de año bisiesto
+        if SimpleDate.is_leap(date.year):
+            # 29 de febrero
+            if date.month == 2 and date.day == 29:
+                return (yearZ + 1, 13, 9, False)
+            # 1-19 de marzo
+            if date.month == 3 and 1 <= date.day <= 19:
+                return (yearZ + 1, 13, date.day + 9, False)
+            if date.month == 3 and date.day == 20:
+                return (yearZ + 1, None, None, 'dia366')
+        else:
+            # Año normal: 1-19 de marzo sumar +8, 20 de marzo es día 28
+            if date.month == 3 and 1 <= date.day <= 19:
+                return (yearZ + 1, 13, date.day + 8, False)
+            if date.month == 3 and date.day == 20:
+                return (yearZ + 1, 13, 28, False)
+            if date.month == 3 and date.day == 20:
+                return (yearZ + 1, None, None, 'dia366')
+        # Normal: calcular mes y día Zinkro
+        month = dias_restantes // self.days_in_month + 1
+        day = dias_restantes % self.days_in_month + 1
+        return (yearZ + 1, month, day, False)
 
     def zinkro_to_gregorian(self, year: int, month: int, day: int):
         """
         Convierte una fecha Zinkro a fecha gregoriana.
         """
+        gregorian_year = year - 10000
+        base_date = SimpleDate(gregorian_year, self.start_date.month, self.start_date.day)
+        if month is None and day is None:
+            # Día 366 Zinkro: corresponde al 29 de febrero gregoriano
+            while not self.is_leap(gregorian_year):
+                gregorian_year += 1
+            return SimpleDate(gregorian_year, 2, 29)
         if month is None:
-            # Día Zero
-            days = year * 365 + self.days_in_year
+            days = (year - 10000) * 365 + self.days_in_year
         else:
-            days = year * 365 + (month - 1) * self.days_in_month + (day - 1)
-        return self.start_date + days
+            days = (year - 10000) * 365 + (month - 1) * self.days_in_month + (day - 1)
+        return base_date + days
 
 if __name__ == "__main__":
     # Ejemplo de uso

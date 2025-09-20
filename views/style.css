@@ -1,0 +1,240 @@
+body {
+  font-family: 'Segoe UI', 'Arial', sans-serif;
+  background: #f7f9fb;
+  color: #222;
+  margin: 0;
+  padding: 0;
+}
+nav {
+  background: #eaf0fa;
+  padding: 12px 24px;
+  font-size: 1.05em;
+  border-bottom: 1px solid #d0d8e8;
+}
+nav a {
+  color: #3a6ea5;
+  text-decoration: none;
+  margin-right: 18px;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+nav a:hover {
+  color: #1d3e6e;
+}
+main {
+  max-width: 700px;
+  margin: 32px auto;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(60,110,165,0.07);
+  padding: 32px 28px;
+}
+h1 {
+  color: #3a6ea5;
+  font-size: 2em;
+  margin-top: 0;
+}
+button, input[type="submit"] {
+  background: #3a6ea5;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px;
+  font-size: 1em;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s;
+}
+button:hover, input[type="submit"]:hover {
+  background: #1d3e6e;
+}
+input, select {
+  font-size: 1em;
+  padding: 6px 10px;
+  border: 1px solid #d0d8e8;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+/* Estilos específicos para la grilla visual del calendario Zinkro */
+.zinkro-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin: 24px auto 0 auto;
+  max-width: 600px;
+  background: #f4f8ff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(60,110,165,0.06);
+  padding: 18px 12px;
+}
+.zinkro-cell {
+  background: #fff;
+  border: 1px solid #d0d8e8;
+  border-radius: 7px;
+  text-align: center;
+  font-size: 1.08em;
+  padding: 14px 0;
+  color: #3a6ea5;
+  font-weight: 500;
+  box-shadow: 0 1px 4px rgba(60,110,165,0.04);
+  transition: background 0.2s, color 0.2s;
+}
+.zinkro-cell:hover {
+  background: #eaf0fa;
+  color: #1d3e6e;
+}
+.zinkro-month {
+  grid-column: span 7;
+  text-align: left;
+  font-size: 1.15em;
+  color: #1d3e6e;
+  font-weight: 600;
+  margin: 18px 0 6px 0;
+  padding-left: 4px;
+}
+.zinkro-special {
+  background: #ffe9b3;
+  color: #a67c00;
+  border: 1.5px solid #ffd700;
+  font-weight: 700;
+}
+.calendar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 18px;
+}
+.months-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+.month {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px rgba(60,110,165,0.07);
+  padding: 12px 10px 18px 10px;
+  min-width: 120px;
+  max-width: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.month-title {
+  font-size: 1.08em;
+  color: #3a6ea5;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.days-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  font-size: 0.98em;
+  color: #1d3e6e;
+  margin-bottom: 4px;
+}
+.days-header span {
+  text-align: center;
+  font-weight: 500;
+}
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+.days-grid .day {
+  background: #eaf0fa;
+  border-radius: 5px;
+  text-align: center;
+  padding: 7px 0;
+  font-size: 1.08em;
+  color: #3a6ea5;
+  margin-bottom: 2px;
+  box-shadow: 0 1px 4px rgba(60,110,165,0.08);
+  cursor: pointer;
+  transition: background 0.22s, color 0.22s, box-shadow 0.22s;
+  position: relative;
+  font-weight: 600;
+  overflow: visible;
+}
+.days-grid .day:hover {
+  background: #3a6ea5;
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(60,110,165,0.18);
+  z-index: 2;
+}
+.days-grid .day[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  left: 50%;
+  top: 110%;
+  transform: translateX(-50%);
+  background: #fffbe9;
+  color: #222;
+  padding: 6px 14px;
+  border-radius: 7px;
+  box-shadow: 0 2px 8px rgba(60,110,165,0.13);
+  font-size: 0.98em;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0.98;
+  font-weight: 400;
+}
+.dia-zero {
+  background: #ffe9b3;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px rgba(166,124,0,0.07);
+  padding: 10px 18px;
+  margin-bottom: 18px;
+  text-align: center;
+}
+.dia-zero-label {
+  color: #a67c00;
+  font-weight: 700;
+  font-size: 1.08em;
+}
+@media (max-width: 900px) {
+  .months-row {
+    gap: 8px;
+  }
+  .month {
+    min-width: 90px;
+    max-width: 110px;
+    padding: 8px 4px 12px 4px;
+  }
+}
+@media (max-width: 600px) {
+  main {
+    padding: 16px 6px;
+  }
+  nav {
+    padding: 8px 8px;
+    font-size: 0.98em;
+  }
+  .calendar {
+    margin-top: 8px;
+  }
+  .months-row {
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+  .month {
+    min-width: 60px;
+    max-width: 80px;
+    padding: 4px 2px 8px 2px;
+  }
+  .month-title {
+    font-size: 0.98em;
+  }
+  .days-header {
+    font-size: 0.88em;
+  }
+  .days-grid .day {
+    font-size: 0.88em;
+    padding: 4px 0;
+  }
+}
