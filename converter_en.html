@@ -118,8 +118,10 @@
       const z = Zinkro.gregorianToZinkro(dateStr);
       let res = '';
       if (!z) res = 'Invalid date.';
-      else if (z.diaZero) {
+      else if (z.month === null && z.day === 0) {
         res = `Year ${z.year} HE, Day Zero (Portal)`;
+      } else if (z.month === null && z.day === 366) {
+        res = `Year ${z.year} HE, Day 366 (Leap Year)`;
       } else {
         res = `Year ${z.year} HE, Month ${z.month}, Day ${z.day}`;
       }
