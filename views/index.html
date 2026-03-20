@@ -16,12 +16,12 @@
   </nav>
   <main>
     <h1>Bienvenido a Zinkro</h1>
-    <p><b>Zinkro</b> es un calendario alternativo que propone 13 meses de 28 días (4 semanas exactas cada uno), más uno o dos días fuera del tiempo, comenzando el 21 de marzo del año -10.000 (Era Holocena). Su objetivo es reconectar el tiempo humano con los ritmos naturales y cósmicos, simplificar la planificación anual y democratizar la simbología de los meses.</p>
+    <p><b>Zinkro</b> es un calendario alternativo que propone 13 meses de 28 días (4 semanas exactas cada uno), más un día fuera del tiempo (Día Zero), comenzando el 20 de marzo del año -10.000 (Era Holocena). Su objetivo es reconectar el tiempo humano con los ritmos naturales y cósmicos, simplificar la planificación anual y democratizar la simbología de los meses.</p>
     <ul>
       <li>Simetría perfecta: cada mes comienza el mismo día de la semana.</li>
       <li>Meses de igual duración, sin ajustes irregulares.</li>
-      <li>Inicio en el equinoccio de marzo (renovación natural).</li>
-      <li>Días fuera del tiempo para reflexión y celebración global.</li>
+      <li>Inicio en el equinoccio de marzo (20 de marzo: Día Zero o equinoccio).</li>
+      <li>Un día fuera del tiempo para reflexión y celebración global.</li>
       <li>Opciones flexibles para nombrar los meses: numéricos, naturales, cualidades humanas, culturas ancestrales.</li>
       <li>Regla de año bisiesto: compatible con el ciclo gregoriano.</li>
     </ul>
@@ -40,14 +40,14 @@
     document.getElementById('fecha-greg').innerHTML = `Hoy en calendario gregoriano: <span style='color:#ffe9b3;'>${dd}/${mm}/${yyyy}</span>`;
     const z = Zinkro.gregorianToZinkro(`${yyyy}-${String(mm).padStart(2,'0')}-${String(dd).padStart(2,'0')}`);
     let texto = '';
-    if (z.diaZero) {
+    if (z.month === null && z.day === 0) {
       texto = `Hoy en Zinkro: <span style='color:#ffe9b3;'>Día Zero</span>`;
     } else {
       texto = `Hoy en Zinkro: <span style='color:#ffe9b3;'>Año ${z.year} HE, Mes ${z.month}, Día ${z.day}</span>`;
     }
     document.getElementById('fecha-zinkro').innerHTML = texto;
     // Extra: solo la fecha Zinkro destacada
-    document.getElementById('hoy-zinkro-extra').innerHTML = `Fecha Zinkro actual: <span style='color:#3a6ea5; background:#fffbe9; padding:2px 8px; border-radius:6px;'>${z.diaZero ? 'Día Zero' : `Año ${z.year} HE, Mes ${z.month}, Día ${z.day}`}</span>`;
+    document.getElementById('hoy-zinkro-extra').innerHTML = `Fecha Zinkro actual: <span style='color:#3a6ea5; background:#fffbe9; padding:2px 8px; border-radius:6px;'>${(z.month === null && z.day === 0) ? 'Día Zero' : `Año ${z.year} HE, Mes ${z.month}, Día ${z.day}`}</span>`;
   </script>
 </body>
 </html>

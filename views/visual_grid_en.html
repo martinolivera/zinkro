@@ -157,7 +157,7 @@
   <a href="converter_en.html">Date Converter</a>
 </nav>
 <div class="topbar">
-      <span>Start day: <b>March 21st</b> of</span>
+      <span>Start day: <b>March 20th</b> of</span>
       <select id="start-year"></select>
       <span style="margin-left:8px; font-weight:600; color:#3a6ea5;">Holocene Era (HE)</span>
       <label for="month-names">Month names:</label>
@@ -169,7 +169,7 @@
   <!-- Day Zero TOP -->
   <div class="dia-zero">
     <span class="dz-dia">Day Out of Time
-      <span class="tooltip">March 21st</span>
+      <span class="tooltip">March 20th</span>
     </span>
     <div class="dia-zero-label">Day Zero</div>
   </div>
@@ -294,15 +294,15 @@ function generateDays() {
 }
 // --- Update tooltips, month names, and leap year logic ---
 function updateCalendar() {
-  const day = 21;
+  const day = 20;  // ← Day Zero is March 20th
   const month = 2; // March (0=January)
   const year = parseInt(document.getElementById('start-year').value, 10);
-  const gregStart = new Date(year, month, day);
+  const gregZeroDay = new Date(year, month, day);  // March 20th
   const monthNameType = document.getElementById('month-names').value;
   const monthNames = MONTH_NAMES[monthNameType] || MONTH_NAMES.numeric;
   generateDays();
   // Calculate weekday of first calendar day (day 1 month 1)
-  const firstDay = new Date(gregStart.getTime() + 1 * 24*60*60*1000); // Day 1 month 1 = March 22
+  const firstDay = new Date(gregZeroDay.getTime() + 1 * 24*60*60*1000); // Day 1 month 1 = March 21st
   const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const startIdx = firstDay.getDay(); // 0=Sun, 1=Mon, ...
   // Recalculate headers and month names
@@ -331,19 +331,19 @@ function updateCalendar() {
       const absDay = (m-1)*28 + (d-1) + 1;
       const dElem = days[d-1];
       const tooltip = dElem.querySelector('.tooltip');
-      const date = new Date(gregStart.getTime() + absDay * 24*60*60*1000);
+      const date = new Date(gregZeroDay.getTime() + absDay * 24*60*60*1000);
       tooltip.textContent = date.toLocaleDateString('en-US', { day: 'numeric', month: 'long' });
     }
   }
   // Day Zero
   const dzTooltip = document.querySelector('.dz-dia .tooltip');
   if (dzTooltip) {
-    dzTooltip.textContent = gregStart.toLocaleDateString('en-US', { day: 'numeric', month: 'long' });
+    dzTooltip.textContent = gregZeroDay.toLocaleDateString('en-US', { day: 'numeric', month: 'long' });
   }
   // Extra Day (leap year logic)
   const extraBlock = document.getElementById('dia-extra-block');
   const extraTooltip = extraBlock.querySelector('.tooltip');
-  const extraDate = new Date(gregStart.getTime() + (13*28 + 1) * 24*60*60*1000);
+  const extraDate = new Date(gregZeroDay.getTime() + (13*28 + 1) * 24*60*60*1000);
   const extraYear = extraDate.getFullYear();
   if ((extraYear % 4 === 0 && extraYear % 100 !== 0) || (extraYear % 400 === 0)) {
     extraBlock.classList.add('activa');

@@ -20,8 +20,8 @@ args = parser.parse_args()
 
 # Leer punto de inicio por defecto desde zinkro.conf si no se especifica --start
 def get_default_start_date():
-    # Siempre usar Era Holocena: 21 de marzo del -10.000
-    return "-10000-03-21"
+    # Siempre usar Era Holocena: 20 de marzo del -10.000
+    return "-10000-03-20"
 
 if args.start:
     start_date_str = args.start

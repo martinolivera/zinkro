@@ -156,7 +156,7 @@
   <a href="converter.html">Conversor de Fechas</a>
 </nav>
 <div class="topbar">
-      <span>Día de inicio: <b>21 de marzo</b> de</span>
+      <span>Día de inicio: <b>20 de marzo</b> de</span>
       <select id="start-year"></select>
       <span style="margin-left:8px; font-weight:600; color:#3a6ea5;">Era Holocena (HE)</span>
       <label for="month-names">Nombres de los meses:</label>
@@ -168,7 +168,7 @@
   <!-- Día Zero ARRIBA -->
   <div class="dia-zero">
     <span class="dz-dia">Día Fuera del Tiempo
-      <span class="tooltip">21 de marzo</span>
+      <span class="tooltip">20 de marzo</span>
     </span>
     <div class="dia-zero-label">Día Zero</div>
   </div>
@@ -293,15 +293,15 @@ function generateDays() {
 }
 // --- Función para actualizar tooltips, nombres de meses y lógica de bisiestos ---
 function updateCalendar() {
-  const day = 21;
+  const day = 20;  // ← Día Zero es el 20 de marzo
   const month = 2; // marzo (0=enero)
   const year = parseInt(document.getElementById('start-year').value, 10);
-  const gregStart = new Date(year, month, day);
+  const gregZeroDay = new Date(year, month, day);  // 20 de marzo
   const monthNameType = document.getElementById('month-names').value;
   const monthNames = MONTH_NAMES[monthNameType] || MONTH_NAMES.numeric;
   generateDays();
   // Calcular el día de la semana del primer día del calendario (día 1 mes 1)
-  const firstDay = new Date(gregStart.getTime() + 1 * 24*60*60*1000); // Día 1 mes 1 = 22 de marzo
+  const firstDay = new Date(gregZeroDay.getTime() + 1 * 24*60*60*1000); // Día 1 mes 1 = 21 de marzo
   const weekDays = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
   const startIdx = firstDay.getDay(); // 0=Dom, 1=Lun, ...
   // Recalcular encabezados y nombres de los meses
@@ -330,19 +330,19 @@ function updateCalendar() {
       const absDay = (m-1)*28 + (d-1) + 1;
       const dElem = days[d-1];
       const tooltip = dElem.querySelector('.tooltip');
-      const date = new Date(gregStart.getTime() + absDay * 24*60*60*1000);
+      const date = new Date(gregZeroDay.getTime() + absDay * 24*60*60*1000);
       tooltip.textContent = date.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
     }
   }
   // Día Zero
   const dzTooltip = document.querySelector('.dz-dia .tooltip');
   if (dzTooltip) {
-    dzTooltip.textContent = gregStart.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
+    dzTooltip.textContent = gregZeroDay.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
   }
   // Día Extra (bisiesto según el año gregoriano del día extra)
   const extraBlock = document.getElementById('dia-extra-block');
   const extraTooltip = extraBlock.querySelector('.tooltip');
-  const extraDate = new Date(gregStart.getTime() + (13*28 + 1) * 24*60*60*1000);
+  const extraDate = new Date(gregZeroDay.getTime() + (13*28 + 1) * 24*60*60*1000);
   const extraYear = extraDate.getFullYear();
   if ((extraYear % 4 === 0 && extraYear % 100 !== 0) || (extraYear % 400 === 0)) {
     extraBlock.classList.add('activa');

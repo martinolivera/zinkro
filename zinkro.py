@@ -9,7 +9,7 @@ class SimpleDate:
 
     @staticmethod
     def from_string(s: str):
-        # Permite formato "-10000-03-21" o "2026-03-21"
+        # Permite formato "-10000-03-20" o "2026-03-20"
         s = s.strip()
         # Detectar año negativo (puede tener más de 4 dígitos)
         if s.startswith('-'):
@@ -96,55 +96,94 @@ class ZinkroCalendar:
         self.months_in_year = 13
         self.days_in_year = self.days_in_month * self.months_in_year
 
-    def gregorian_to_zinkro(self, date) -> Tuple[int, int, int, bool]:
+    def gregorian_to_zinkro(self, date) -> Tuple[int, int, int]:
         """
         Convierte una fecha gregoriana a fecha Zinkro.
-        Retorna (año, mes, día, es_dia_zero)
+        Retorna (año, mes, día)
+        
+        El año Zinkro va de 20/3 a 19/3:
+        - 20/3/Y = Día Zero del año Y (year = Y+10000, month=None, day=0)
+        - 21/3/Y = Mes 1, Día 1 del año Y (year = Y+10000)
+        - 19/3/Y+1 en bisiesto = Día 366 (year = Y+10000, month=None, day=366)
+        
+        IMPORTANTE: Las fechas antes del 20/3 pertenecen al año anterior.
+        Ejemplo para 2028 (bisiesto):
+        - 1-20 de febrero 2028: año 12027 (pertenecen a 2027)
+        - 28-29 de febrero 2028: año 12027 (pertenecen a 2027)
+        - 1-19 de marzo 2028: año 12027 (pertenecen a 2027)
+        - 20 de marzo 2028: Día Zero del año 12028 ← CAMBIO
+        - 21-31 de marzo 2028: año 12028 (pertenecen a 2028)
         """
-        # Calcular días totales desde el inicio Holoceno
-        delta_days = date - self.start_date
-        # Calcular año Zinkro y día dentro del año Zinkro considerando bisiestos
-        yearZ = 0
-        dias_restantes = delta_days
-        while True:
-            es_bisiesto = SimpleDate.is_leap(self.start_date.year + yearZ)
-            dias_en_este_ano = 365 + (1 if es_bisiesto else 0)
-            if dias_restantes < dias_en_este_ano:
-                break
-            dias_restantes -= dias_en_este_ano
-            yearZ += 1
-        # Día Zero: 21 de marzo de cualquier año
-        if (date.month == 3 and date.day == 21):
-            # Si es el inicio absoluto, año 0
-            if delta_days == 0:
-                return (0, None, None, True)
-            # Si es otro año, Día Zero de ese año
-            return (0, None, None, True)
-        # Día 366 (extra) en año bisiesto
-        if SimpleDate.is_leap(self.start_date.year + yearZ) and dias_restantes == 365:
-            return (yearZ + 1, None, None, 'dia366')
-            # Mapeo especial para fechas gregorianas de año bisiesto
-        if SimpleDate.is_leap(date.year):
-            # 29 de febrero
-            if date.month == 2 and date.day == 29:
-                return (yearZ + 1, 13, 9, False)
-            # 1-19 de marzo
-            if date.month == 3 and 1 <= date.day <= 19:
-                return (yearZ + 1, 13, date.day + 9, False)
-            if date.month == 3 and date.day == 20:
-                return (yearZ + 1, None, None, 'dia366')
+        from datetime import date as datetime_date
+        
+        # CASO 1: Día Zero (20 de marzo) - CAMBIA EL AÑO
+        if date.month == 3 and date.day == 20:
+            yearZ = date.year + 10000  # ← AÑO ACTUAL
+            return (yearZ, None, 0)  # Día = 0, Mes = None (indefinido)
+        
+        # Determinar a qué año Zinkro pertenece
+        if date.month < 3 or (date.month == 3 and date.day < 20):
+            # Antes del 20 de marzo: año anterior
+            yearZ = (date.year - 1) + 10000
+            year_ref = date.year - 1
         else:
-            # Año normal: 1-19 de marzo sumar +8, 20 de marzo es día 28
-            if date.month == 3 and 1 <= date.day <= 19:
-                return (yearZ + 1, 13, date.day + 8, False)
-            if date.month == 3 and date.day == 20:
-                return (yearZ + 1, 13, 28, False)
-            if date.month == 3 and date.day == 20:
-                return (yearZ + 1, None, None, 'dia366')
-        # Normal: calcular mes y día Zinkro
-        month = dias_restantes // self.days_in_month + 1
-        day = dias_restantes % self.days_in_month + 1
-        return (yearZ + 1, month, day, False)
+            # Después del 20 de marzo: año actual
+            yearZ = date.year + 10000
+            year_ref = date.year
+        
+        # CASO 2: Después del 20 de marzo (21/3 - 31/3 - ... - 19/3 siguiente)
+        if date.month == 3 and date.day > 20:
+            # 21 de marzo en adelante del mismo año gregoriano
+            month = 1
+            day = date.day - 20
+            return (yearZ, month, day)
+        
+        if date.month > 3:
+            # Abril a diciembre del mismo año gregoriano
+            march_21 = datetime_date(date.year, 3, 21)
+            days_since = (datetime_date(date.year, date.month, date.day) - march_21).days
+            
+            month = days_since // 28 + 1
+            day = days_since % 28 + 1
+            return (yearZ, month, day)
+        
+        # CASO 3: Antes del 20 de marzo (enero, febrero, 1-19 de marzo)
+        # Estos días pertenecen al año anterior
+        # Contar días desde el 20 de marzo del año anterior hasta hoy
+        
+        march_20_ref = datetime_date(year_ref, 3, 20)
+        current_date = datetime_date(date.year, date.month, date.day)
+        days_from_prev_zero = (current_date - march_20_ref).days
+        
+        # days_from_prev_zero es el número de días DESPUÉS del Día Zero anterior
+        # Ejemplo: 21 de marzo = 1 día, 22 de marzo = 2 días, etc.
+        
+        # IMPORTANTE: El año que puede ser bisiesto es date.year (el AÑO ACTUAL)
+        # porque febrero 29 está en el año actual, no en el anterior
+        is_leap_current = SimpleDate.is_leap(date.year)
+        
+        # Estructura del año Zinkro:
+        # - Día Zero: 20/3 (no se cuenta aquí)
+        # - Mes 1-13: 13*28 = 364 días
+        # - Día 366 en bisiesto: 19/3 del siguiente año (cuando el año actual es bisiesto)
+        # Total: 364 días (normal) o 365 días (bisiesto)
+        
+        # Mapeamos:
+        # - Día 1-364: Meses 1-13, días 1-28 cada uno
+        # - Día 365 (si el año ACTUAL es bisiesto): Mes indefinido, día especial 366
+        
+        # Calcular mes y día
+        if days_from_prev_zero <= 364:
+            # Encaja en los 13 meses normales
+            month = (days_from_prev_zero - 1) // 28 + 1
+            day = (days_from_prev_zero - 1) % 28 + 1
+            return (yearZ, month, day)
+        elif days_from_prev_zero == 365 and is_leap_current:
+            # Día 366 especial en año bisiesto (19 de marzo cuando el año actual es bisiesto)
+            return (yearZ, None, 366)  # Mes = None (indefinido), Día = 366
+        else:
+            # Esto shouldn't happen
+            raise ValueError(f"Fecha fuera de rango: {date} (days={days_from_prev_zero}, is_leap_current={is_leap_current})")
 
     def zinkro_to_gregorian(self, year: int, month: int, day: int):
         """
@@ -166,7 +205,7 @@ class ZinkroCalendar:
 if __name__ == "__main__":
     # Ejemplo de uso
     # Configura el punto de inicio del calendario
-    inicio = SimpleDate.from_string("-10000-03-21")
+    inicio = SimpleDate.from_string("-10000-03-20")
     cal = ZinkroCalendar(start_date=inicio)
 
     # Convertir fecha gregoriana a Zinkro

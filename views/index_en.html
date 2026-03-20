@@ -16,12 +16,12 @@
   </nav>
   <main>
     <h1>Welcome to Zinkro</h1>
-    <p><b>Zinkro</b> is an alternative calendar proposing 13 months of 28 days (4 exact weeks each), plus one or two days out of time, starting on March 21st of the year -10,000 (Holocene Era). Its goal is to reconnect human time with natural and cosmic rhythms, simplify annual planning, and democratize month symbolism.</p>
+    <p><b>Zinkro</b> is an alternative calendar proposing 13 months of 28 days (4 exact weeks each), plus one day out of time (Day Zero), starting on March 20th of the year -10,000 (Holocene Era). Its goal is to reconnect human time with natural and cosmic rhythms, simplify annual planning, and democratize month symbolism.</p>
     <ul>
       <li>Perfect symmetry: each month starts on the same weekday.</li>
       <li>Months of equal length, no irregular adjustments.</li>
-      <li>Starts at the March equinox (natural renewal).</li>
-      <li>Days out of time for global reflection and celebration.</li>
+      <li>Starts at the March equinox (March 20th: Day Zero).</li>
+      <li>One day out of time for global reflection and celebration.</li>
       <li>Flexible month naming: numeric, natural, human qualities, ancestral cultures.</li>
       <li>Leap year rule: compatible with the Gregorian cycle.</li>
     </ul>
@@ -40,14 +40,14 @@
     document.getElementById('greg-date').innerHTML = `Today in Gregorian calendar: <span style='color:#ffe9b3;'>${mm}/${dd}/${yyyy}</span>`;
     const z = Zinkro.gregorianToZinkro(`${yyyy}-${String(mm).padStart(2,'0')}-${String(dd).padStart(2,'0')}`);
     let text = '';
-    if (z.diaZero) {
+    if (z.month === null && z.day === 0) {
       text = `Today in Zinkro: <span style='color:#ffe9b3;'>Day Zero</span>`;
     } else {
       text = `Today in Zinkro: <span style='color:#ffe9b3;'>Year ${z.year} HE, Month ${z.month}, Day ${z.day}</span>`;
     }
     document.getElementById('zinkro-date').innerHTML = text;
     // Extra: only Zinkro date highlighted
-    document.getElementById('today-zinkro-extra').innerHTML = `Current Zinkro date: <span style='color:#3a6ea5; background:#fffbe9; padding:2px 8px; border-radius:6px;'>${z.diaZero ? 'Day Zero' : `Year ${z.year} HE, Month ${z.month}, Day ${z.day}`}</span>`;
+    document.getElementById('today-zinkro-extra').innerHTML = `Current Zinkro date: <span style='color:#3a6ea5; background:#fffbe9; padding:2px 8px; border-radius:6px;'>${(z.month === null && z.day === 0) ? 'Day Zero' : `Year ${z.year} HE, Month ${z.month}, Day ${z.day}`}</span>`;
   </script>
 </body>
 </html>
